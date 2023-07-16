@@ -1,5 +1,10 @@
+@font-face {
+  font-family: 'Jet Brains';
+  src: url('./assets/fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+}
+
 :root {
-  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: 'Jet Brains', ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
   line-height: 1.5;
   font-weight: 400;
 
