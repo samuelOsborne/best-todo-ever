@@ -1,11 +1,19 @@
-import './App.css'
+import { useRecoilState } from 'recoil';
+import { isLoggedIn } from './atoms/atoms';
 
 function App() {
+  const [isLoggedInAtomState, setIsLoggedInAtomState] = useRecoilState(isLoggedIn);
+
   return (
     <>
       <h1>To do</h1>
       <div className="card">
         <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Log in</span>
+            <input type="checkbox" className="ml-5 checkbox checkbox-primary" onChange={(e) => { console.log(e.target.checked); setIsLoggedInAtomState(e.target.checked) }} />
+            <div> logged: {String(isLoggedInAtomState)}</div>
+          </label>
           <label className="label cursor-pointer">
             <span className="label-text">Change font to jetbrains</span>
             <input type="checkbox" className="ml-5 checkbox checkbox-primary" />
