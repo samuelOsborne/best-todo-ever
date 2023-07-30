@@ -1,3 +1,10 @@
+import { contextBridge, ipcRenderer } from "electron"
+import { IPC_ACTIONS } from "./IPC/IPCActions";
+
+const {
+  SET_WINDOW_TITLE,
+} = IPC_ACTIONS.Window;
+
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise(resolve => {
     if (condition.includes(document.readyState)) {
@@ -84,9 +91,14 @@ function useLoading() {
 
 const { appendLoading, removeLoading } = useLoading()
 domReady().then(appendLoading)
+// domReady().then(fetchSessionData)
 
 window.onmessage = ev => {
   ev.data.payload === 'removeLoading' && removeLoading()
 }
 
 setTimeout(removeLoading, 4999)
+
+contextBridge.exposeInMainWorld('ipcAPI', {
+  setWindowTitle: (title: string ) => ipcRenderer.send(SET_WINDOW_TITLE, title),
+});

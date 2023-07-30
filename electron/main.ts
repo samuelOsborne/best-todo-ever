@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
+import { registerIPCHandlers } from './IPC/IPCHandlers'
 
 // The built directory structure
 //
@@ -23,6 +24,7 @@ function createWindow() {
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      sandbox: false
     },
   })
 
@@ -45,4 +47,7 @@ app.on('window-all-closed', () => {
     }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  registerIPCHandlers();
+  createWindow();
+})

@@ -1,47 +1,126 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useAuth } from './auth';
 
 export const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleButtonClick = () => {
-        navigate('/app');
-    };
+  const [errorMessage, setErrorMessage] = useState('');
 
-    return (
-        <>
-            <div className="relative flex flex-col justify-center overflow-hidden">
-                <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg rounded-lg">
-                    <h1 className="text-3xl font-semibold text-center">best-todo-ever</h1>
-                    <label className="label">
-                        <span className="text-base label-text ">Welcome</span>
-                    </label>
-                    <form className="space-y-4">
-                        <div>
-                            <label className="label">
-                                <span className="text-base label-text">Email</span>
-                            </label>
-                            <input type="text" placeholder="Email Address" className="w-full input input-bordered input-primary" />
-                        </div>
-                        <div>
-                            <label className="label">
-                                <span className="text-base label-text">Password</span>
-                            </label>
-                            <input type="password" placeholder="Enter Password"
-                                className="w-full input input-bordered input-primary" />
-                        </div>
-                        <a href="#" className="text-xs text-gray-600 hover:underline hover:text-blue-600">Forget Password?</a>
-                        <div className="flex flex-row gap-8 justify-center">
-                            <div>
-                                <button className="btn btn-primary" onClick={handleButtonClick}>Login</button>
-                                {/* <Link to="/app">Go to New Page using Link</Link> */}
-                            </div>
-                            <div>
-                                <button className="btn btn-primary">Create</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const errorMessageLabel = useRef<HTMLLabelElement>(null);
+
+  const { signUp } = useAuth();
+  const { logIn } = useAuth();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/app');
+    }
+  }, [navigate, user]);
+
+  const checkInputs = (): boolean => {
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
+
+    // Check if email or password are empty and apply css error class to input fields
+    if (!email || !password || email === '' || password === '') {
+      if (!email || email === '') {
+        emailRef.current?.classList.add('input-error');
+        setErrorMessage('Please enter valid email.')
+      }
+      if (!password || password === '') {
+        passwordRef.current?.classList.add('input-error');
+        setErrorMessage('Please enter valid password.')
+      }
+      return true;
+    }
+    setErrorMessage('')
+    return false;
+  }
+
+  const handleLogin = async (event: any) => {
+    event.preventDefault();
+
+    const email = emailRef.current?.value ?? "";
+    const password = passwordRef.current?.value ?? "";
+
+    if (checkInputs()) {
+      return;
+    }
+
+    const { error } = await logIn({ email, password })
+
+    if (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+      return;
+    }
+  };
+
+  const handleCreate = async (event: any) => {
+    event.preventDefault();
+
+    const email = emailRef.current?.value ?? "";
+    const password = passwordRef.current?.value ?? "";
+
+    if (checkInputs()) {
+      return;
+    }
+
+    const { error } = await signUp({ email, password })
+
+    if (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+      return;
+    }
+  }
+
+  return (
+    <>
+      <div className="relative flex flex-col justify-center overflow-hidden">
+        <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg rounded-lg">
+          <h1 className="text-3xl font-semibold text-center text-dark text-gray-600">best-todo-ever</h1>
+          <label className="label">
+            <span className="text-base label-text text-gray-600">Welcome</span>
+          </label>
+          <form className="space-y-4">
+            <div>
+              <label className="label">
+                <span className="text-base label-text">Email</span>
+              </label>
+              <input ref={emailRef} type="text" placeholder="Email Address" className="w-full input input-bordered input-primary" />
             </div>
-        </>
-    )
+            <div>
+              <label className="label">
+                <span className="text-base label-text">Password</span>
+              </label>
+              <input ref={passwordRef} type="password" placeholder="Enter Password"
+                className="w-full input input-bordered input-primary" />
+            </div>
+            {
+              errorMessage !== '' && (
+                <>
+                  <span ref={errorMessageLabel} className="text-xs label-text text-error display-none">{errorMessage}</span>
+                  <br />
+                </>
+              )
+            }
+            <a href="#" className="text-xs text-gray-600 hover:underline hover:text-blue-600">Forget Password?</a>
+            <div className="flex flex-row gap-8 justify-center">
+              <div>
+                <button className="btn btn-primary" onClick={handleLogin}>Login</button>
+              </div>
+              <div>
+                <button className="btn btn-primary" onClick={handleCreate}>Create</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  )
 }

@@ -10,17 +10,19 @@ import {
   Route,
   Routes
 } from "react-router-dom";
+import { AuthProvider } from './components/auth.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <RecoilRoot>
-      <HashRouter>
-        <Routes>
-          <Route path='/' Component={Login} />
-          <Route path='/app' Component={App} />
-        </Routes>
-        {/* <App /> */}
-      </HashRouter>
+      <AuthProvider>
+        <HashRouter>
+          <Routes>
+            <Route path='/' Component={Login} />
+            <Route path='/app' Component={App} />
+          </Routes>
+        </HashRouter>
+      </AuthProvider>
     </RecoilRoot>
   </React.StrictMode>,
 )
