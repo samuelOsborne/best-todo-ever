@@ -6,6 +6,7 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [updatePasswordMode, setUpdatePasswordMode] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -14,6 +15,7 @@ export const Login = () => {
   const { signUp } = useAuth();
   const { logIn } = useAuth();
   const { user } = useAuth();
+  const { updatePassword } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -29,7 +31,7 @@ export const Login = () => {
     if (!email || !password || email === '' || password === '') {
       if (!email || email === '') {
         emailRef.current?.classList.add('input-error');
-        setErrorMessage('Please enter valid email.')
+        setErrorMessage('Please enter a valid email.')
       }
       if (!password || password === '') {
         passwordRef.current?.classList.add('input-error');
@@ -79,6 +81,31 @@ export const Login = () => {
     }
   }
 
+  const enterUpdatePasswordMode = () => {
+    setUpdatePasswordMode(true)
+  }
+
+  const handlePasswordUpdate = async () => {
+    const password = passwordRef.current?.value;
+
+    if (!password || password === '') {
+      passwordRef.current?.classList.add('input-error');
+      setErrorMessage('Please enter a valid password.');
+
+      return;
+    } else {
+      setErrorMessage('');
+    }
+
+    const { error } = await updatePassword(password);
+
+    if (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+      return;
+    }
+  }
+
   return (
     <>
       <div className="relative flex flex-col justify-center overflow-hidden">
@@ -88,12 +115,15 @@ export const Login = () => {
             <span className="text-base label-text text-gray-600">Welcome</span>
           </label>
           <form className="space-y-4">
-            <div>
-              <label className="label">
-                <span className="text-base label-text">Email</span>
-              </label>
-              <input ref={emailRef} type="text" placeholder="Email Address" className="w-full input input-bordered input-primary" />
-            </div>
+            {!updatePasswordMode && (
+              <div>
+                <label className="label">
+                  <span className="text-base label-text">Email</span>
+                </label>
+                <input ref={emailRef} type="text" placeholder="Email Address" className="w-full input input-bordered input-primary" />
+              </div>
+            )
+            }
             <div>
               <label className="label">
                 <span className="text-base label-text">Password</span>
@@ -109,15 +139,26 @@ export const Login = () => {
                 </>
               )
             }
-            <a href="#" className="text-xs text-gray-600 hover:underline hover:text-blue-600">Forget Password?</a>
-            <div className="flex flex-row gap-8 justify-center">
-              <div>
-                <button className="btn btn-primary" onClick={handleLogin}>Login</button>
+            <a className="text-xs text-gray-600 hover:underline hover:text-blue-600" onClick={enterUpdatePasswordMode}>Forget Password?</a>
+            {!updatePasswordMode && (
+              <div className="flex flex-row gap-8 justify-center">
+                <div>
+                  <button className="btn btn-primary" onClick={handleLogin}>Login</button>
+                </div>
+                <div>
+                  <button className="btn btn-primary" onClick={handleCreate}>Create</button>
+                </div>
               </div>
-              <div>
-                <button className="btn btn-primary" onClick={handleCreate}>Create</button>
+            )
+            }
+            {updatePasswordMode && (
+              <div className="flex flex-row gap-8 justify-center">
+                <div>
+                  <button className="btn btn-primary" onClick={handlePasswordUpdate}>Update</button>
+                </div>
               </div>
-            </div>
+            )
+            }
           </form>
         </div>
       </div>

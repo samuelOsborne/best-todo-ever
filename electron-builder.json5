@@ -13,12 +13,14 @@
     "dist"
   ],
   "mac": {
+    "icon": "public/notepad.icns",
     "artifactName": "${productName}_${version}.${ext}",
     "target": [
       "dmg"
     ]
   },
   "win": {
+    "icon": "public/notepad.ico",
     "target": [
       {
         "target": "nsis",

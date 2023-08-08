@@ -71,37 +71,9 @@ export const TaskList = () => {
             <div className='absolute right-5 top-5'>
                 <TopButtonMenu />
             </div>
-            <div className="text-sm text-purple mt-3 mb-3 label">Welcome <span className={"underline"}>{user?.email}</span></div>
+            <div className="text-sm text-purple mt-3 mb-3 label">Welcome <span className={"underline ml-20"}>{user?.email}</span></div>
             <div className="card text-align-left">
                 <div className="form-control">
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Change font to jetbrains</span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" defaultChecked={true} />
-                    </label>
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Integrate supabase</span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" defaultChecked={true} />
-                    </label>
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Add login</span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" defaultChecked={true} />
-                    </label>
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Add input debounce </span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" />
-                    </label>
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Read / Write to-do's to supabase</span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" />
-                    </label>
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Create lemonsqueezy shop</span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" />
-                    </label>
-                    <label className="label cursor-pointer">
-                        <span className="label-text">Integrate lemonsqueezy license key paywall</span>
-                        <input type="checkbox" className="ml-5 checkbox checkbox-primary" />
-                    </label>
                     {
                         <>
                             {taskList.map((task) => (

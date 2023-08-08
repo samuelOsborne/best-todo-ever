@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
-import { AuthError, AuthResponse, Session, SignUpWithPasswordCredentials, User, createClient } from "@supabase/supabase-js";
+import { AuthError, AuthResponse, Session, SignUpWithPasswordCredentials, User } from "@supabase/supabase-js";
 
 const AuthContext = createContext({} as AuthProviderValue);
 
@@ -16,6 +16,7 @@ export interface AuthProviderValue {
   signUp: (data: SignUpWithPasswordCredentials) => Promise<AuthResponse>,
   logIn: (data: SignUpWithPasswordCredentials) => Promise<AuthResponse>,
   signOut: () => Promise<{ error: AuthError | null }>,
+  updatePassword: (password: string) => Promise<{ error: AuthError | null }>,
   user: User | null | undefined
 }
 
@@ -61,6 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signUp: async (data: SignUpWithPasswordCredentials) => supabase.auth.signUp(data),
     logIn: (data: SignUpWithPasswordCredentials) => supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
+    updatePassword: (password: string) => supabase.auth.updateUser({ password }),
     user,
   }
 

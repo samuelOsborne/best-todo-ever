@@ -27,7 +27,7 @@ export const ListItem = (props: ListItemProps) => {
             console.log("Sending checkbox to supabase")
 
             // Update the task with the same id
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('todos')
                 .update({ is_complete: event.target.checked })
                 .eq('id', props.task.id)
@@ -47,7 +47,7 @@ export const ListItem = (props: ListItemProps) => {
         console.log("Sending input to supabase")
 
         // Update the task with the same id
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('todos')
             .update({ task: input })
             .eq('id', props.task.id)

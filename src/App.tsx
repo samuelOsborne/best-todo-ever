@@ -8,8 +8,13 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    const license = window.localStorage.getItem('licenseKey');
+
+    if (!license) {
       navigate('/');
+    }
+    if (!user) {
+      navigate('/login');
     }
   }, [navigate, user]);
 
